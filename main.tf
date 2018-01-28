@@ -105,52 +105,6 @@ resource "azurerm_virtual_machine" "vm" {
     enabled     = true
     storage_uri = "${azurerm_storage_account.stor.primary_blob_endpoint}"
   }
-### provisioner
-connection {
-    
-    user = "${var.admin_username}"
-    password = "${var.admin_password}"
-    # The connection will use the local SSH agent for authentication.
-  }
 
 
-
-  # install Mongodb, nodejs
-   provisioner "remote-exec" {
-    inline = [
-      "sudo apt-get update",
-      "sudo apt-get install mongodb -y",
-      "sudo apt-get install nodejs -y"
-      "sudo mkdir /data/",
-      "sudo mkdir /data/db/",
-      "sudo mkdir /demo/",
-
-    ]
-   }
-
-  #copy the chat program to the new server
-  provisioner "file" {
-    source      = "./package.json"
-    destination = "/demo/package.json"
-  }
-
- provisioner "file" {
-    source      = "./server.js"
-    destination = "/demo/server.js"
-  }
-
-   provisioner "file" {
-    source      = "./index.html"
-    destination = "/demo/index.html"
-  }
-
-    #Start Mongodb and node
-   provisioner "remote-exec" {
-    inline = [
-      "sudo cd /demo/",
-      "sudo npm install",
-      "sudo mongod --port=50000 &",
-      "sudo node ./server.js &"
-    ]
-   }
 }
