@@ -3,7 +3,6 @@
 # so first log in by using 'az login'  in your terminal
 
 
-
 resource "azurerm_resource_group" "rg" {
   name     = "${var.resource_group}"
   location = "${var.location}"
@@ -99,12 +98,13 @@ resource "azurerm_virtual_machine" "vm" {
 
   os_profile_linux_config {
     disable_password_authentication = false
+
+
   }
 
   boot_diagnostics {
     enabled     = true
     storage_uri = "${azurerm_storage_account.stor.primary_blob_endpoint}"
-  }
-
-
+  }  
 }
+
